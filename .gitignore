@@ -1,0 +1,14 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+
+# SSH Keys
+*.pem
+
+# Ansible
+*.retry
+
+# OS
+.DS_Store
