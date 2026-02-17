@@ -1,4 +1,4 @@
-name: Deploy 3-Tier Infrastructure
+name: 3-Tier Infrastructure
 
 on:
   workflow_dispatch:
@@ -7,6 +7,14 @@ on:
         description: "Client Name"
         required: true
         default: "clientA"
+      action:
+        description: "Choose action"
+        required: true
+        default: "apply"
+        type: choice
+        options:
+          - apply
+          - destroy
 
 jobs:
   deploy:
@@ -30,18 +38,11 @@ jobs:
         run: terraform init
         working-directory: terraform
 
-      - name: Terraform Plan
-        run: terraform plan -var="client_name=${{ github.event.inputs.client_name }}"
+      - name: Terraform Action
+        run: |
+          if [ "${{ github.event.inputs.action }}" == "destroy" ]; then
+            terraform destroy -auto-approve -var="client_name=${{ github.event.inputs.client_name }}"
+          else
+            terraform apply -auto-approve -var="client_name=${{ github.event.inputs.client_name }}"
+          fi
         working-directory: terraform
-
-      - name: Terraform Apply
-        run: terraform apply -auto-approve -var="client_name=${{ github.event.inputs.client_name }}"
-        working-directory: terraform
-
-      - name: Install Ansible
-
-      
-        run: sudo apt-get update && sudo apt-get install -y ansible
-
-      - name: Run Ansible Playbook
-        run: ansible-playbook ansible/site.yml -i ansible/inventory.ini
