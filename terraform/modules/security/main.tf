@@ -14,7 +14,11 @@ resource "aws_security_group" "web_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
+<<<<<<< HEAD
     cidr_blocks = ["0.0.0.0/0"]
+=======
+    cidr_blocks = ["13.233.232.188/32"]
+>>>>>>> a7b89b0 (Final 3-tier infra with Terraform modules, Ansible roles, security hardening and CI setup)
   }
 
   egress {
