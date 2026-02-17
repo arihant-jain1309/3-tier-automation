@@ -1,11 +1,51 @@
-- name: Install MySQL
+
+---
+# Install MySQL Server
+
+- name: Install MySQL Server
   apt:
     name: mysql-server
     state: present
     update_cache: yes
 
-- name: Start and enable MySQL
+# Install Python dependency required for MySQL Ansible modules
+
+- name: Install MySQL Python dependency
+  apt:
+    name: python3-pymysql
+    state: present
+
+# Ensure MySQL service is running
+
+- name: Ensure MySQL is started and enabled
   service:
     name: mysql
     state: started
     enabled: yes
+
+# -----------------------------
+# MySQL Basic Hardening Section
+# -----------------------------
+
+# Remove anonymous users
+
+- name: Remove anonymous MySQL users
+  mysql_user:
+    name: ''
+    host_all: yes
+    state: absent
+
+# Remove test database
+
+- name: Remove test database
+  mysql_db:
+    name: test
+    state: absent
+
+# Disable remote root login
+
+- name: Disallow remote root login
+  mysql_user:
+    name: root
+    host: '%'
+    state: absent
